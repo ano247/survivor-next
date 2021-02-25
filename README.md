@@ -1,5 +1,7 @@
 # survivor-next
 
+Service which routes distress calls from civilians to concerned authorities
+
 ## Components
 
 ### Users
