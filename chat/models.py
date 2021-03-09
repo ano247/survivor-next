@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.timezone import now
 
 from user.models import CustomUser
+# FK
 
 
 class Chat(models.Model):

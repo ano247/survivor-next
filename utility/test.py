@@ -63,3 +63,4 @@ class UserTestCase(APITestCase):
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer ' + response.data['access']
         )
+#

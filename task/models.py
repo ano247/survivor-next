@@ -2,6 +2,8 @@ from django.db import models
 
 from user.models import Advocate, Survivor
 
+# can be any task
+
 
 class Task(models.Model):
     survivor = models.ForeignKey(

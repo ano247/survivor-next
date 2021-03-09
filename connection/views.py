@@ -25,9 +25,11 @@ class RequestConnectionView(APIView):
     )
 
     def post(self, request):
-        connection = Connection.objects.create(survivor_id=request.user.user_token)
+        connection = Connection.objects.create(
+            survivor_id=request.user.user_token)
 
-        process = Process(target=request_advocates(connection_id=connection.id, data=request.data))
+        process = Process(target=request_advocates(
+            connection_id=connection.id, data=request.data))
         process.start()
 
         return Response(connection.id, status.HTTP_200_OK)
@@ -45,13 +47,16 @@ class AcceptConnectionView(APIView):
     )
 
     def post(self, request):
-        connection = Connection.objects.get(id=request.data.get('connection_id'))
+        connection = Connection.objects.get(
+            id=request.data.get('connection_id'))
 
         if connection.advocate_id:
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            survivor = Survivor.objects.get(user__user_token=connection.survivor_id)
-            advocate = Advocate.objects.get(user__user_token=request.user.user_token)
+            survivor = Survivor.objects.get(
+                user__user_token=connection.survivor_id)
+            advocate = Advocate.objects.get(
+                user__user_token=request.user.user_token)
 
             connection.advocate_id = advocate.user_id
             connection.save()
@@ -84,7 +89,8 @@ class ListConnections(APIView):
         user = request.user
 
         if hasattr(user, 'survivor'):
-            result = Connection.objects.filter(survivor_id=user.user_token).exclude(advocate_id__isnull=True)
+            result = Connection.objects.filter(
+                survivor_id=user.user_token).exclude(advocate_id__isnull=True)
         else:
             result = Connection.objects.filter(advocate_id=user.user_token)
 
@@ -92,7 +98,7 @@ class ListConnections(APIView):
 
 
 def request_advocates(connection_id, data):
-    sleep_time = 30
+    sleep_time = 30  # 30 sec timer
 
     survivor_id = Connection.objects.get(id=connection_id).survivor_id
     survivor = Survivor.objects.get(user__user_token=survivor_id)
